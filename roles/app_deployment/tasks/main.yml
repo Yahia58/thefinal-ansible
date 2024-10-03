@@ -1,0 +1,16 @@
+- name: Copy application files
+  copy:
+    src: /path/to/local/app
+    dest: /var/www/html/app
+    owner: apache
+    group: apache
+    mode: 0755
+
+- name: Start the application service
+  systemd:
+    name: my_app
+    state: started
+    enabled: true
+  notify:
+    - Restart Application
+

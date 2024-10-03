@@ -1,0 +1,18 @@
+- name: Install DNS server
+  yum:
+    name: bind
+    state: present
+
+- name: Configure named.conf
+  copy:
+    src: named.conf
+    dest: /etc/named.conf
+  notify:
+    - Restart DNS
+
+- name: Start and enable DNS service
+  service:
+    name: named
+    state: started
+    enabled: true
+

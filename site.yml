@@ -1,0 +1,11 @@
+- name: Deploy complete infrastructure
+  hosts: all
+  become: true
+  roles:
+     - webserver
+     - database
+     - app_deployment
+     - firewall
+     - users
+     - dns_config
+

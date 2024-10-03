@@ -1,0 +1,60 @@
+---
+- name: Install and Configure MySQL server on Ubuntu
+  hosts: all
+  become: true
+  tasks:
+  
+    - name: Check if MySQL is already installed
+      command: dpkg -l | grep mysql-server
+      register: mysql_installed
+      ignore_errors: true
+
+    - name: Install MySQL server on Ubuntu
+      apt:
+        name: mysql-server
+        state: present
+      when: mysql_installed.rc != 0  # Install only if not already installed
+
+    - name: Ensure MySQL client and Python library are installed
+      apt:
+        name:
+          - mysql-client
+          - python3-pymysql
+        state: present
+
+    - name: Start and enable MySQL service on Ubuntu
+      service:
+        name: mysql
+        state: started
+        enabled: true
+
+    - name: Create /home/ubuntu/.my.cnf for passwordless MySQL access
+      copy:
+        dest: /home/ubuntu/.my.cnf
+        content: |
+          [client]
+          user=root
+          password=123  # Change this to use a vault variable if needed
+        mode: '0600'
+
+    - name: Create MySQL root user
+      mysql_user:
+        name: root
+        password: "123"  # Change this to use a vault variable if needed
+        priv: '*.*:ALL'
+        host: 'localhost'
+        state: present
+
+    - name: Create application database
+      mysql_db:
+        name: app_db
+        state: present
+
+    - name: Create application user
+      mysql_user:
+        name: app_user
+        password: "your_app_user_password"  # Change this to use a vault variable if needed
+        priv: 'app_db.*:ALL'
+        host: '%'
+        state: present
+
