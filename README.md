@@ -7,16 +7,16 @@ This project is an automated deployment solution for a web application built usi
 ![ Project Structure Description](tree.png)
 
 ## the Ansible concepts that i use in this project:
-### Introduction to Ansible
-### Installation and Configuration
-### Inventory Management
-### Understanding and Executing Playbooks
-### Creating and Using Roles
-### Exploring Ansible Modules
-### Working with Variables and Facts
-### Utilizing Handlers in Ansible
-### Creating Templates with Jinja2
-### Error Handling and Debugging Techniques
+### &nbsp;&nbsp;&nbsp; Introduction to Ansible
+### &nbsp;&nbsp;&nbsp; Installation and Configuration
+### &nbsp;&nbsp;&nbsp; Inventory Management
+### &nbsp;&nbsp;&nbsp; Understanding and Executing Playbooks
+### &nbsp;&nbsp;&nbsp; Creating and Using Roles
+### &nbsp;&nbsp;&nbsp; Exploring Ansible Modules
+### &nbsp;&nbsp;&nbsp; Working with Variables and Facts
+### &nbsp;&nbsp;&nbsp; Utilizing Handlers in Ansible
+### &nbsp;&nbsp;&nbsp; Creating Templates with Jinja2
+### &nbsp;&nbsp;&nbsp; Error Handling and Debugging Techniques
 
 ## Key Features
    ### Automated Application Deployment:
