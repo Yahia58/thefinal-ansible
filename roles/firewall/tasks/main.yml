@@ -1,22 +1,35 @@
-- name: Install firewalld
-  yum:
-    name: firewalld
+# Ensure UFW is installed (instead of firewalld)
+- name: Install UFW
+  apt:
+    name: ufw
     state: present
+  become: true
 
-- name: Start and enable firewalld
-  service:
-    name: firewalld
-    state: started
-    enabled: true
+# Enable UFW
+- name: Enable UFW
+  command: ufw --force enable
+  become: true
 
-- name: Allow HTTP and HTTPS
-  firewalld:
-    service: "{{ item }}"
-    permanent: true
-    state: enabled
+# Allow HTTP and HTTPS through UFW
+- name: Allow HTTP and HTTPS through UFW
+  ufw:
+    rule: allow
+    name: "{{ item }}"
   loop:
-    - http
-    - https
-  notify:
-    - Reload Firewalld
+    - 'Apache'          # This allows HTTP (Port 80)
+    - 'Apache Secure'   # This allows HTTPS (Port 443)
+  become: true
+
+# Allow MySQL through UFW using port 3306
+- name: Allow MySQL through UFW
+  ufw:
+    rule: allow
+    port: '3306'
+    proto: tcp
+  become: true
+
+# Reload UFW to apply changes
+- name: Reload UFW
+  command: ufw reload
+  become: true
 

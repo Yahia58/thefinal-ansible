@@ -1,16 +1,40 @@
+---
 - name: Copy application files
   copy:
-    src: /path/to/local/app
+    src: app/
     dest: /var/www/html/app
-    owner: apache
-    group: apache
-    mode: 0755
+    owner: www-data
+    group: www-data
+    mode: '0755'
 
-- name: Start the application service
+- name: Install required system packages
+  apt:
+    name:
+      - python3-pip
+      - python3-venv
+    state: present
+  become: true
+
+- name: Create a virtual environment
+  command: python3 -m venv /var/www/html/app/venv
+  args:
+    creates: /var/www/html/app/venv
+  become: true
+
+- name: Install required Python packages in the virtual environment
+  command: /var/www/html/app/venv/bin/pip install mysql-connector-python passlib
+  become: true
+
+- name: Copy systemd service file
+  copy:
+    src: my_app.service
+    dest: /etc/systemd/system/my_app.service
+  become: true
+
+- name: Start and enable application service
   systemd:
     name: my_app
     state: started
     enabled: true
-  notify:
-    - Restart Application
+  become: true
 

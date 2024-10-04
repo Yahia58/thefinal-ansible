@@ -1,0 +1,14 @@
+[Unit]
+Description=My Flask Application
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/html/app/server
+ExecStart=/usr/bin/python3 /var/www/html/app/server/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

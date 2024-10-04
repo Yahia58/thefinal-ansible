@@ -1,9 +1,28 @@
 Listen 80
+
 <VirtualHost *:80>
     ServerName {{ inventory_hostname }}
     DocumentRoot /var/www/html
+
+    # Add server admin email
+    ServerAdmin webmaster@{{ inventory_hostname }}
+
+    # Directory settings
     <Directory /var/www/html>
         AllowOverride All
+        Options -Indexes +FollowSymLinks
+        Require all granted
     </Directory>
+
+    # Error and Access Logs
+    ErrorLog /var/log/apache2/error.log
+    CustomLog /var/log/apache2/access.log combined
+
+    # Additional security headers (Optional)
+    <IfModule mod_headers.c>
+        Header always set X-Frame-Options "DENY"
+        Header always set X-Content-Type-Options "nosniff"
+        Header always set X-XSS-Protection "1; mode=block"
+    </IfModule>
 </VirtualHost>
 

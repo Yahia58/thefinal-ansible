@@ -1,11 +1,22 @@
-- name: Deploy complete infrastructure
-  hosts: all
+---
+- name: Deploy database infrastructure
+  hosts: db
   become: true
   roles:
-     - webserver
-     - database
-     - app_deployment
-     - firewall
-     - users
-     - dns_config
+    - database
+
+- name: Deploy DNS infrastructure
+  hosts: dns
+  become: true
+  roles:
+    - dns_config
+
+- name: Deploy web server infrastructure
+  hosts: web
+  become: true
+  roles:
+    - webserver
+    - app_deployment
+    - firewall
+    - users
 

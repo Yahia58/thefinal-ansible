@@ -1,3 +1,9 @@
+---
+- name: Update the apt package cache
+  apt:
+    update_cache: yes
+  become: true
+
 - name: Install Apache
   apt:
     name: apache2
@@ -8,9 +14,23 @@
   template:
     src: httpd.conf.j2
     dest: /etc/apache2/apache2.conf
+  register: apache_config_changed
   notify:
-    - Restart Apache
+    - Reload Apache
   become: true
+
+- name: Set permissions for Apache configuration file
+  file:
+    path: /etc/apache2/apache2.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Reload systemd manager configuration
+  command: systemctl daemon-reload
+  become: true
+  ignore_errors: true
 
 - name: Start and enable Apache
   service:
@@ -18,4 +38,11 @@
     state: started
     enabled: true
   become: true
+
+- name: Reload Apache
+  service:
+    name: apache2
+    state: reloaded
+  become: true
+  when: apache_config_changed is defined and apache_config_changed.changed
 

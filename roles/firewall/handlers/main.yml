@@ -1,5 +1,4 @@
-- name: Reload Firewalld
-  service:
-    name: firewalld
-    state: reloaded
-
+# Reload UFW to apply changes
+- name: Reload UFW
+  command: ufw reload
+  become: true

@@ -1,5 +1,5 @@
 - name: Restart Application
   systemd:
-    name: my_app
+    name: my_app             # تأكد من أن اسم الخدمة صحيح
     state: restarted
 

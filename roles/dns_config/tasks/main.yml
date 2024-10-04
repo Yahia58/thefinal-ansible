@@ -1,18 +1,20 @@
 - name: Install DNS server
-  yum:
-    name: bind
+  apt:
+    name: bind9
     state: present
+  become: true
 
 - name: Configure named.conf
   copy:
-    src: named.conf
-    dest: /etc/named.conf
+    src: files/named.conf  # Ensure the path is correct
+    dest: /etc/bind/named.conf
   notify:
     - Restart DNS
 
 - name: Start and enable DNS service
   service:
-    name: named
+    name: bind9
     state: started
     enabled: true
+  become: true
 
