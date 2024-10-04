@@ -3,12 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Application</title>
     <link rel="stylesheet" href="styles/main.css">
+    <title>Database Records</title>
 </head>
 <body>
-    <h1>Welcome to Yahya Application!</h1>
-    <p>This is a simple web application.</p>
+    <h1>Database Records</h1>
+    <table>
+        <tr>
+            <th>Column1</th>
+            <th>Column2</th>
+            <!-- Add more headers as needed -->
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <!-- Add more columns as needed -->
+        </tr>
+        {% endfor %}
+    </table>
     <script src="scripts/app.js"></script>
 </body>
 </html>

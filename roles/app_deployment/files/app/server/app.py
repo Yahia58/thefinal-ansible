@@ -1,38 +1,28 @@
-from flask import Flask, jsonify
+from flask import Flask, render_template
 import mysql.connector
-from mysql.connector import Error
 
 app = Flask(__name__)
 
-def create_connection():
-    """ Create a database connection to the MySQL database """
-    connection = None
-    try:
-        connection = mysql.connector.connect(
-            host='db',  # Use the service name of your database server
-            user='app_user',  # Use the created application user
-            password='MySQL_DB_Password',  # Use the variable if stored securely
-            database='app_db'  # The name of the database created
-        )
-        print("Connection to MySQL DB successful")
-    except Error as e:
-        print(f"The error '{e}' occurred")
+# Database connection
+def get_db_connection():
+    connection = mysql.connector.connect(
+        host='172.31.35.109',  # Replace with your DB server IP
+        user='app_user',
+        password='MySQL_DB_Password',  # Use your vault variable here
+        database='app_db'
+    )
     return connection
 
 @app.route('/')
-def home():
-    return "Welcome to My Application!"
-
-@app.route('/data')
-def data():
-    connection = create_connection()
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM your_table_name")
-    results = cursor.fetchall()
+def index():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute('SELECT column1, column2 FROM your_table')  # Replace with your actual table name
+    rows = cursor.fetchall()
     cursor.close()
     connection.close()
-    return jsonify(results)
+    return render_template('index.html', rows=rows)
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(host='172.31.35.109', port=5000)  # Debug mode for local development
 

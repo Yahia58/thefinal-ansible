@@ -1,6 +1,21 @@
+---
 - name: Reload Apache
   service:
     name: apache2
     state: reloaded
+  become: true
+
+# إضافة Handler جديد لإعادة تحميل خدمة Flask
+- name: Reload Flask service
+  systemd:
+    name: my_app.service
+    state: reloaded
+  become: true
+
+# إضافة Handler جديد لإعادة تشغيل خدمة Flask
+- name: Restart Flask service
+  systemd:
+    name: my_app.service
+    state: restarted
   become: true
 

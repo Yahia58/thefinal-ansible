@@ -1,0 +1,14 @@
+[Unit]
+Description=My Flask Application
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/ansible-project/app
+Environment="PATH=/home/ubuntu/ansible-project/venv/bin"
+ExecStart=/home/ubuntu/ansible-project/venv/bin/python3 server/app.py
+
+[Install]
+WantedBy=multi-user.target
+

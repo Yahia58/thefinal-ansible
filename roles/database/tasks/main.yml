@@ -37,3 +37,37 @@
     login_password: "{{ vault_mysql_root_password }}"
   when: db_creation.changed
 
+- name: Verify MySQL user and database creation
+  mysql_query:
+    login_user: root
+    login_password: "{{ vault_mysql_root_password }}"
+    query: "SELECT User FROM mysql.user WHERE User = 'app_user';"
+  register: user_check
+
+- name: Show MySQL user check
+  debug:
+    msg: "User app_user exists: {{ user_check.query_result | length > 0 }}"
+
+- name: Verify the app_db exists
+  mysql_query:
+    login_user: root
+    login_password: "{{ vault_mysql_root_password }}"
+    query: "SHOW DATABASES LIKE 'app_db';"
+  register: db_check
+
+- name: Show database check
+  debug:
+    msg: "Database app_db exists: {{ db_check.query_result | length > 0 }}"
+
+- name: Create a table in app_db
+  mysql_query:
+    login_user: root
+    login_password: "{{ vault_mysql_root_password }}"
+    query: |
+      USE app_db;  -- Select the app_db database
+      CREATE TABLE IF NOT EXISTS your_table (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          column1 VARCHAR(255) NOT NULL,
+          column2 VARCHAR(255) NOT NULL
+      );
+
